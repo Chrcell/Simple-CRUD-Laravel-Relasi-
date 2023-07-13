@@ -22,7 +22,19 @@
 
         <div class="mb-3">
           <label for="jenis" class="form-label">JENIS</label>
-          <input type="text" class="form-control" name="jenis" value="{{ $barang->jenis }}"  id="jenis" >
+          <select class="form-control" name="jenis" id="jenisbarang">
+            @foreach ($jenis as $jb)
+            @if($jb->id==$barang->jenis)
+            <option selected value="{{ $jb->id }}" {{($barang->jenisbarang->jenis ?? old('jenis')) == $jb->id ? 'selected' : '' }}>
+                {{ $jb->jenisbarang }}
+            </option>
+            @else 
+             <option value="{{ $jb->id }}" {{($barang->jenisbarang->jenis ?? old('jenis')) == $jb->id ? 'selected' : '' }}>
+                {{ $jb->jenisbarang }}
+            </option>
+            @endif
+            @endforeach
+        </select>
         </div>
 
         <div class="mb-3">

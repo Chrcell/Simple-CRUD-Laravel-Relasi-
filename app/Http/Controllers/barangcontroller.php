@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-//import Model "barang
 use App\Models\barang;
-use Illuminate\View\View;
-
+use App\Models\jenis;
 use Illuminate\Http\Request;
 
 class barangcontroller extends Controller
@@ -15,7 +13,7 @@ class barangcontroller extends Controller
      * 
      *  @return view
      */
-    public function index(): View
+    public function index()
     {
 
         //render view with posts
@@ -29,8 +27,10 @@ class barangcontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('barang.create');
+    { 
+        return view('barang.create')->with([
+            'jenis'=> jenis::all(),
+        ]);
     }
      /**
      * Store a newly created resource in storage.
@@ -41,23 +41,20 @@ class barangcontroller extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'namabarang' => 'required|min:1',
-            'jenis' => 'required|min:1',
-            'tgldikirim' => 'required|min:1',
-            'tglditerima' => 'required|min:1',
+            'namabarang' => 'required',
+            'jenis' => 'required',
+            'tgldikirim' => 'required',
+            'tglditerima' => 'required',
         ]);
 
         $barang = new barang;
         $barang->namabarang = $request->namabarang;
-        
         $barang->jenis = $request->jenis;
-        
         $barang->tgldikirim = $request->tgldikirim;
-        
         $barang->tglditerima = $request->tglditerima;
         $barang->save();
 
-        return redirect()->route('barang.index')->with('success', 'data ditambah'); 
+        return to_route('barang.index')->with('success', 'data ditambah'); 
     }
     /**
      * Display the specified resource.
@@ -77,9 +74,12 @@ class barangcontroller extends Controller
      */
     public function edit($id)
     {
-       
-        return view('barang.edit')->with([
-            'barang'=>barang::find($id),
+        $barang = barang::find($id);
+        if (!$barang) return redirect()->route('barang.index')
+            ->with('error_message', 'barang dengan id = ' . $id . ' tidak ditemukan');
+        return view('barang.edit', [
+            'barang' => $barang,
+            'jenis' => jenis::all()
         ]);
     }
     /**
@@ -92,10 +92,10 @@ class barangcontroller extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'namabarang' => 'required|min:1',
-            'jenis' => 'required|min:1',
-            'tgldikirim' => 'required|min:1',
-            'tglditerima' => 'required|min:1',
+            'namabarang' => 'required',
+            'jenis' => 'required',
+            'tgldikirim' => 'required',
+            'tglditerima' => 'required',
         ]);
 
         $barang = barang::find($id);

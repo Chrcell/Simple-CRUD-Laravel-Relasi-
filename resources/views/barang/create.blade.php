@@ -21,7 +21,14 @@
 
         <div class="mb-3">
           <label for="jenis" class="form-label">JENIS</label>
-          <input type="text" class="form-control" name="jenis" id="jenis" >
+          <select type="text" class="form-control" name="jenis" value="" id="jenis">
+           <option value="">-- PILIH --</option>
+            @foreach ($jenis as $jb)
+            <option value="{{ $jb->id }}">
+              {{ $jb->jenisbarang }}
+            </option>
+            @endforeach
+          </select>
         </div>
 
         <div class="mb-3">
@@ -34,7 +41,9 @@
           <input type="number" class="form-control" name="tglditerima" id="tglditerima" >
           
         </div>
+        <a href="{{ route('barang.index')}}" class="btn btn-default">
         <button type="submit" class="btn btn-primary ">Simpan</button>
+        
       </form>
             </div>
         </div>
